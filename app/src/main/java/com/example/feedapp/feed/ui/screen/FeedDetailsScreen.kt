@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -23,7 +26,7 @@ fun FeedDetailsScreen(feedViewModel: FeedViewModel = FeedViewModel(), id: Int = 
     val context = LocalContext.current
     ToolbarWidget(
         name = "FeedDetails",
-        backClick = { feedViewModel.navController?.popBackStack() },
+        backClick = { feedViewModel.navController?.navigateUp() },
         content = {
             articlesItem.value?.let {
                 FeedDetails(articlesItem = it) { type ->
