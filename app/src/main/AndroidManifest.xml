@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FeedApp"
+        android:name=".app.FeedApplication"
         tools:targetApi="33">
         <activity
             android:name=".splash.ui.screen.SplashActivity"

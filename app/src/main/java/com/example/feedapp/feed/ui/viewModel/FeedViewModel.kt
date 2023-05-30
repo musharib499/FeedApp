@@ -3,14 +3,18 @@ package com.example.feedapp.feed.ui.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.example.feedapp.feed.model.ArticlesItem
-import com.example.feedapp.feed.model.feedResponse
+import com.example.feedapp.feed.data.api.model.ArticlesItem
+import com.example.feedapp.feed.data.api.model.feedResponse
+import com.example.feedapp.feed.ui.repository.FeedRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FeedViewModel : ViewModel() {
+@HiltViewModel
+class FeedViewModel @Inject constructor(private val repository: FeedRepository) : ViewModel() {
     var navController: NavController? = null
     private var _articlesList = MutableStateFlow(feedResponse.articles)
     var articlesList = _articlesList
@@ -21,6 +25,14 @@ class FeedViewModel : ViewModel() {
         viewModelScope.launch {
             _articlesItem.emit(articlesItem)
         }
+    }
+    init {
+        getFeedResponse()
+    }
+
+   private fun getFeedResponse() = viewModelScope.launch {
+       val result = repository?.getFeedResponse()
+       println(result.toString())
     }
 
     fun toggleLike(articlesItem: ArticlesItem?) {

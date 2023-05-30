@@ -1,4 +1,4 @@
-package com.example.feedapp.feed.model
+package com.example.feedapp.feed.data.api.model
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable

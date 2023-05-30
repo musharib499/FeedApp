@@ -1,11 +1,9 @@
 package com.example.feedapp.feed.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.feedapp.feed.ui.screen.FeedDetailsScreen
 import com.example.feedapp.feed.ui.screen.FeedScreen
 import com.example.feedapp.feed.ui.viewModel.FeedViewModel

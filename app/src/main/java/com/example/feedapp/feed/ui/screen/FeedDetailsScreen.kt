@@ -15,23 +15,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.feedapp.base.component.ToolbarWidget
-import com.example.feedapp.feed.model.ArticlesItem
-import com.example.feedapp.feed.model.ClickTypeEnum
+import com.example.feedapp.feed.data.api.model.ArticlesItem
+import com.example.feedapp.feed.data.api.model.ClickTypeEnum
 import com.example.feedapp.feed.showMessage
 import com.example.feedapp.feed.ui.viewModel.FeedViewModel
 
 @Composable
-fun FeedDetailsScreen(feedViewModel: FeedViewModel = FeedViewModel(), id: Int = 0) {
-    val articlesItem = feedViewModel.articlesItem.collectAsState()
+fun FeedDetailsScreen(feedViewModel: FeedViewModel? = null, id: Int = 0) {
+    val articlesItem = feedViewModel?.articlesItem?.collectAsState()
     val context = LocalContext.current
     ToolbarWidget(
         name = "FeedDetails",
-        backClick = { feedViewModel.navController?.navigateUp() },
+        backClick = { feedViewModel?.navController?.navigateUp() },
         content = {
-            articlesItem.value?.let {
+            articlesItem?.value?.let {
                 FeedDetails(articlesItem = it) { type ->
                     when (type) {
-                        ClickTypeEnum.LIKE -> feedViewModel.toggleLike(it)
+                        ClickTypeEnum.LIKE -> feedViewModel?.toggleLike(it)
                         else -> showMessage(context = context, message = type.name)
                     }
                 }
