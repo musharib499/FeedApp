@@ -1,33 +1,19 @@
 package com.example.feedapp.feed.viewModel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.feedapp.base.component.baseApi.BaseApiResult
 import com.example.feedapp.feed.data.api.model.ArticlesItem
-import com.example.feedapp.feed.data.api.model.Source
-import com.example.feedapp.feed.data.api.model.feedResponse
 import com.example.feedapp.feed.repository.FeedRepository
-import com.example.feedapp.feed.userIntent.FeedIntent
-import com.example.feedapp.feed.userIntent.FeedState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(private val repository: FeedRepository) : ViewModel() {
-
-    val userIntent = Channel<FeedIntent>(Channel.UNLIMITED)
-    var state = mutableStateOf<FeedState>(FeedState.Idle)
-        private set
-
-
     var navController: NavController? = null
     private var _articlesList = MutableStateFlow<List<ArticlesItem>?>(null)
     var articlesList = _articlesList
