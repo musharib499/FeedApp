@@ -34,9 +34,26 @@ import com.example.feedapp.feed.data.api.model.ClickTypeEnum
 import com.example.feedapp.feed.showMessage
 import com.example.feedapp.feed.ui.navigation.FeedScreenNavigationEnum
 import com.example.feedapp.feed.viewModel.FeedViewModel
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun FeedScreen(feedViewModel: FeedViewModel? = null) {
+    val context = LocalContext.current
+   val state =  feedViewModel?.state?.collectAsState()
+    when (state?.value) {
+        is FeedState.Idle -> LoadingScreen()
+        is FeedState.Loading -> LoadingScreen()
+        is FeedState.ArticlesList -> FeedListScreen(feedViewModel)
+        is FeedState.Error -> {
+            showMessage(context, "Hello")
+        }
+
+        else -> {}
+    }
+}
+
+@Composable
+fun FeedListScreen(feedViewModel: FeedViewModel?) {
     val feedList = feedViewModel?.articlesList?.collectAsState()
     val context = LocalContext.current
     ToolbarWidget(
@@ -49,7 +66,7 @@ fun FeedScreen(feedViewModel: FeedViewModel? = null) {
                 items(feedList?.value.orEmpty()) { articlesItem ->
                     FeedCard(articlesItem, onClickLike = {
                         when (it) {
-                            ClickTypeEnum.LIKE -> feedViewModel?.toggleLike(articlesItem)
+                            ClickTypeEnum.LIKE -> feedViewModel?.sendEvent(FeedIntent.LikeArticles(articlesItem))
                             else -> showMessage(context = context, message = it.name)
                         }
                     }) {
