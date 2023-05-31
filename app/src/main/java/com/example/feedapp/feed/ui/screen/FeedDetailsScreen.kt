@@ -1,13 +1,9 @@
 package com.example.feedapp.feed.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -18,7 +14,8 @@ import com.example.feedapp.base.component.ToolbarWidget
 import com.example.feedapp.feed.data.api.model.ArticlesItem
 import com.example.feedapp.feed.data.api.model.ClickTypeEnum
 import com.example.feedapp.feed.showMessage
-import com.example.feedapp.feed.ui.viewModel.FeedViewModel
+import com.example.feedapp.feed.viewModel.FeedViewModel
+
 
 @Composable
 fun FeedDetailsScreen(feedViewModel: FeedViewModel? = null, id: Int = 0) {

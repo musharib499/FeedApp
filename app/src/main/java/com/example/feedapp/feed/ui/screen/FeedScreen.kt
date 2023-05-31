@@ -33,11 +33,13 @@ import com.example.feedapp.feed.data.api.model.ArticlesItem
 import com.example.feedapp.feed.data.api.model.ClickTypeEnum
 import com.example.feedapp.feed.showMessage
 import com.example.feedapp.feed.ui.navigation.FeedScreenNavigationEnum
-import com.example.feedapp.feed.ui.viewModel.FeedViewModel
+import com.example.feedapp.feed.userIntent.FeedIntent
+import com.example.feedapp.feed.userIntent.FeedState
+import com.example.feedapp.feed.viewModel.FeedViewModel
 
 @Composable
 fun FeedScreen(feedViewModel: FeedViewModel? = null) {
-    val feedList  =  feedViewModel?.articlesList?.collectAsState()
+    val feedList = feedViewModel?.articlesList?.collectAsState()
     val context = LocalContext.current
     ToolbarWidget(
         name = "FeedList",

@@ -8,7 +8,7 @@ import kotlinx.parcelize.RawValue
 
 data class FeedResponse(
     val totalResults: Int? = null,
-    val articles: List<ArticlesItem?>? = null,
+    val articles: List<ArticlesItem>? = null,
     val status: String? = null
 )
 
