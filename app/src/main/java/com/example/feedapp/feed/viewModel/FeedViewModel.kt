@@ -1,6 +1,5 @@
 package com.example.feedapp.feed.viewModel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -12,7 +11,6 @@ import com.example.feedapp.feed.userIntent.FeedState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -21,10 +19,11 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedViewModel @Inject constructor(private val repository: FeedRepository) : ViewModel() {
     var navController: NavController? = null
+
     private var _articlesList = MutableStateFlow<List<ArticlesItem>?>(null)
     var articlesList = _articlesList
 
-    private val _articlesItem = MutableStateFlow<ArticlesItem?>(_articlesList.value?.get(0))
+    private val _articlesItem = MutableStateFlow(_articlesList.value?.get(0))
     val articlesItem = _articlesItem
 
     private val source: String = "techcrunch"
@@ -38,7 +37,6 @@ class FeedViewModel @Inject constructor(private val repository: FeedRepository) 
         sendEvent(FeedIntent.FetchFeed)
     }
 
-
     fun sendEvent(intent: FeedIntent) = viewModelScope.launch {
         userIntent.send(intent)
     }
@@ -51,7 +49,6 @@ class FeedViewModel @Inject constructor(private val repository: FeedRepository) 
             }
         }
     }
-
 
     fun setFeedDetails(articlesItem: ArticlesItem?) {
         viewModelScope.launch {
@@ -72,7 +69,7 @@ class FeedViewModel @Inject constructor(private val repository: FeedRepository) 
         }
     }
 
-    fun toggleLike(articlesItem: ArticlesItem?) {
+    private fun toggleLike(articlesItem: ArticlesItem?) {
         val isLike = articlesItem?.isLiked?.not()
         _articlesItem.update { it?.copy(isLiked = isLike) }
         _articlesList.update { currentList ->
@@ -84,6 +81,5 @@ class FeedViewModel @Inject constructor(private val repository: FeedRepository) 
                 }
             }
         }
-
     }
 }
