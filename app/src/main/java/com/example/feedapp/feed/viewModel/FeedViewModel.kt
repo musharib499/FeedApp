@@ -29,7 +29,7 @@ class FeedViewModel @Inject constructor(private val repository: FeedRepository) 
 
     private val source: String = "techcrunch"
 
-    val userIntent = Channel<FeedIntent>(Channel.UNLIMITED)
+    private val userIntent = Channel<FeedIntent>(Channel.UNLIMITED)
     var state = MutableStateFlow<FeedState>(FeedState.Idle)
         private set
 
