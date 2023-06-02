@@ -14,6 +14,7 @@ import com.example.feedapp.base.component.ToolbarWidget
 import com.example.feedapp.feed.data.api.model.ArticlesItem
 import com.example.feedapp.feed.data.api.model.ClickTypeEnum
 import com.example.feedapp.feed.showMessage
+import com.example.feedapp.feed.userIntent.FeedIntent
 import com.example.feedapp.feed.viewModel.FeedViewModel
 
 
@@ -28,7 +29,7 @@ fun FeedDetailsScreen(feedViewModel: FeedViewModel? = null, id: Int = 0) {
             articlesItem?.value?.let {
                 FeedDetails(articlesItem = it) { type ->
                     when (type) {
-                        ClickTypeEnum.LIKE -> feedViewModel?.toggleLike(it)
+                        ClickTypeEnum.LIKE -> feedViewModel.sendEvent(FeedIntent.LikeArticles(it))
                         else -> showMessage(context = context, message = type.name)
                     }
                 }
