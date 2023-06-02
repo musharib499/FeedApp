@@ -1,20 +1,23 @@
 package com.example.feedapp.feed.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.feedapp.feed.ui.screen.FeedDetailsScreen
 import com.example.feedapp.feed.ui.screen.FeedScreen
-import com.example.feedapp.feed.ui.viewModel.FeedViewModel
+import com.example.feedapp.feed.viewModel.FeedViewModel
 
 
 @Composable
-fun FeedNavigationCompose(viewModel: FeedViewModel) {
+fun FeedNavigationCompose() {
     val navController = rememberNavController()
-     viewModel.navController = navController
+    val viewModel = hiltViewModel<FeedViewModel>().apply {
+        this.navController = navController
+    }
+
     NavHost(navController = navController, startDestination = FeedScreenNavigationEnum.FEED_LIST.value) {
         composable(FeedScreenNavigationEnum.FEED_LIST.value) {
             FeedScreen(viewModel)

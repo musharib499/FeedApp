@@ -1,4 +1,4 @@
-package com.example.feedapp.feed.model
+package com.example.feedapp.feed.data.api.model
 
 data class Feed(val id: Int, val title:String,val secondary:String,val description:String,val image:String)
 var feedListArray = arrayListOf<Feed>(
