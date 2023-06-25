@@ -9,6 +9,7 @@ import com.example.feedapp.feed.repository.FeedRepository
 import com.example.feedapp.feed.userIntent.FeedIntent
 import com.example.feedapp.feed.userIntent.FeedState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -26,7 +27,7 @@ class FeedViewModel @Inject constructor(private val repository: FeedRepository) 
     private val _articlesItem = MutableStateFlow(_articlesList.value?.get(0))
     val articlesItem = _articlesItem
 
-    private val source: String = "techcrunch"
+    private val source: String = "TechCrunch"
 
     private val userIntent = Channel<FeedIntent>(Channel.UNLIMITED)
     var state = MutableStateFlow<FeedState>(FeedState.Idle)
@@ -44,7 +45,10 @@ class FeedViewModel @Inject constructor(private val repository: FeedRepository) 
     private fun handleIntent() = viewModelScope.launch {
         userIntent.consumeAsFlow().collect { collector ->
             when (collector) {
-                is FeedIntent.FetchFeed -> getFeedResponse(source)
+                is FeedIntent.FetchFeed -> {
+                    getFeedArticles(source)
+                }
+
                 is FeedIntent.LikeArticles -> toggleLike(collector.articles)
             }
         }
@@ -56,9 +60,20 @@ class FeedViewModel @Inject constructor(private val repository: FeedRepository) 
         }
     }
 
+    private fun getFeedArticles(source: String) = viewModelScope.launch(Dispatchers.IO) {
+        repository.getFeedListFeed(source).collect { list ->
+            if (list.isNullOrEmpty()) {
+                getFeedResponse(source)
+            }
+            _articlesList.emit(list)
+            state.emit(FeedState.ArticlesList(list))
+
+        }
+    }
+
+
     private fun getFeedResponse(source: String) = viewModelScope.launch {
         state.emit(FeedState.Loading)
-
         when (val result = repository.getFeedResponse(source)) {
             is BaseApiResult.Success -> {
                 _articlesList.emit(result.data?.articles)
@@ -69,17 +84,8 @@ class FeedViewModel @Inject constructor(private val repository: FeedRepository) 
         }
     }
 
-    private fun toggleLike(articlesItem: ArticlesItem?) {
+    private fun toggleLike(articlesItem: ArticlesItem?) = viewModelScope.launch(Dispatchers.IO) {
         val isLike = articlesItem?.isLiked?.not()
-        _articlesItem.update { it?.copy(isLiked = isLike) }
-        _articlesList.update { currentList ->
-            currentList?.map { listItem ->
-                if (listItem === articlesItem) {
-                    listItem.copy(isLiked = isLike)
-                } else {
-                    listItem
-                }
-            }
-        }
+        repository.toggleLikeUnLike(articlesItem?.articlesId ?: -1, isLike ?: false)
     }
 }

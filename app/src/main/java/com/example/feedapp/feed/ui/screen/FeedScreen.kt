@@ -33,8 +33,9 @@ import com.example.feedapp.feed.data.api.model.ArticlesItem
 import com.example.feedapp.feed.data.api.model.ClickTypeEnum
 import com.example.feedapp.feed.showMessage
 import com.example.feedapp.feed.ui.navigation.FeedScreenNavigationEnum
+import com.example.feedapp.feed.userIntent.FeedIntent
+import com.example.feedapp.feed.userIntent.FeedState
 import com.example.feedapp.feed.viewModel.FeedViewModel
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun FeedScreen(feedViewModel: FeedViewModel? = null) {
