@@ -2,28 +2,34 @@ package com.example.feedapp.feed.data.api.model
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.parcelize.RawValue
+
 
 data class FeedResponse(
     val totalResults: Int? = null,
     val articles: List<ArticlesItem>? = null,
     val status: String? = null
 )
-
+@Entity(tableName = "feed_table")
 data class ArticlesItem(
+    @PrimaryKey(autoGenerate = true)
+    var articlesId: Int = 0,
     val publishedAt: String? = null,
     val author: String? = null,
     val urlToImage: String? = null,
     val description: String? = null,
+    @Embedded
     val source: Source? = null,
     val title: String? = null,
     val url: String? = null,
     val content: String? = null,
     val isLiked: Boolean? = false
 )
-
 data class Source(
     val name: String? = null,
     val id: String? = null

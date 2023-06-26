@@ -6,5 +6,6 @@ sealed class FeedState {
     object Idle : FeedState()
     object Loading : FeedState()
     data class ArticlesList(val articlesList: List<ArticlesItem>?) : FeedState()
+    data class Articles(val articles: ArticlesItem?) : FeedState()
     data class Error(val error: String?) : FeedState()
 }
