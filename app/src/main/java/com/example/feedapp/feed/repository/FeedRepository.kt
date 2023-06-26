@@ -35,4 +35,8 @@ class FeedRepository @Inject constructor(private val api: FeedApi, private val f
     suspend fun toggleLikeUnLike(id:Int,isLike:Boolean) {
         feedDao.toggleLikeUnLike(id, isLike)
     }
+
+    suspend fun getArticles(id:Int):Flow<ArticlesItem?> {
+       return feedDao.getArticles(id)
+    }
 }

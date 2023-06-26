@@ -18,4 +18,7 @@ interface FeedDao {
     @Query("UPDATE feed_table Set isLiked=:isLike where articlesId=:id")
     fun toggleLikeUnLike(id: Int, isLike: Boolean)
 
+    @Query("SELECT * FROM feed_table where articlesId=:id")
+    fun getArticles(id: Int) : Flow<ArticlesItem?>
+
 }

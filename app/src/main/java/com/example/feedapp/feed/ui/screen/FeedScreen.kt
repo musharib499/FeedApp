@@ -26,8 +26,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.feedapp.R
 import com.example.feedapp.base.component.ToolbarWidget
 import com.example.feedapp.feed.data.api.model.ArticlesItem
 import com.example.feedapp.feed.data.api.model.ClickTypeEnum
@@ -38,23 +41,24 @@ import com.example.feedapp.feed.userIntent.FeedState
 import com.example.feedapp.feed.viewModel.FeedViewModel
 
 @Composable
-fun FeedScreen(feedViewModel: FeedViewModel? = null) {
+fun FeedScreen(navigation:NavController? = null) {
+    val feedViewModel = hiltViewModel<FeedViewModel>()
     val context = LocalContext.current
-   val state =  feedViewModel?.state?.collectAsState()
+    val state =  feedViewModel.state.collectAsState()
     when (state?.value) {
         is FeedState.Idle -> LoadingScreen()
         is FeedState.Loading -> LoadingScreen()
-        is FeedState.ArticlesList -> FeedListScreen(feedViewModel)
+        is FeedState.ArticlesList -> FeedListScreen(navigation,feedViewModel)
         is FeedState.Error -> {
             showMessage(context, "Hello")
         }
 
-        else -> {}
+        else -> Unit
     }
 }
 
 @Composable
-fun FeedListScreen(feedViewModel: FeedViewModel?) {
+fun FeedListScreen(navigation: NavController?, feedViewModel: FeedViewModel?) {
     val feedList = feedViewModel?.articlesList?.collectAsState()
     val context = LocalContext.current
     ToolbarWidget(
@@ -71,8 +75,7 @@ fun FeedListScreen(feedViewModel: FeedViewModel?) {
                             else -> showMessage(context = context, message = it.name)
                         }
                     }) {
-                        feedViewModel?.setFeedDetails(articlesItem)
-                        feedViewModel?.navController?.navigate(FeedScreenNavigationEnum.FEED_DETAILS.value)
+                        navigation?.navigate(FeedScreenNavigationEnum.FEED_DETAILS.value+"/${articlesItem.articlesId}")
 
                     }
                 }
@@ -112,6 +115,7 @@ fun FeedImage(image: String?) {
     val imageLoad = ImageRequest.Builder(LocalContext.current)
         .data(image)
         .crossfade(true)
+        .placeholder(R.drawable.placeholder)
         .build()
     AsyncImage(
         model = imageLoad,

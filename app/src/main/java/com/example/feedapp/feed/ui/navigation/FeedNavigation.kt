@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.feedapp.feed.ui.screen.FeedDetailsScreen
 import com.example.feedapp.feed.ui.screen.FeedScreen
 import com.example.feedapp.feed.viewModel.FeedViewModel
@@ -14,23 +15,14 @@ import com.example.feedapp.feed.viewModel.FeedViewModel
 @Composable
 fun FeedNavigationCompose() {
     val navController = rememberNavController()
-    val viewModel = hiltViewModel<FeedViewModel>().apply {
-        this.navController = navController
-    }
 
     NavHost(navController = navController, startDestination = FeedScreenNavigationEnum.FEED_LIST.value) {
         composable(FeedScreenNavigationEnum.FEED_LIST.value) {
-            FeedScreen(viewModel)
+            FeedScreen(navController)
         }
-        composable(FeedScreenNavigationEnum.FEED_DETAILS.value) {
-            FeedDetailsScreen(viewModel)
+        composable(FeedScreenNavigationEnum.FEED_DETAILS.value + "/{id}") { backNavigation ->
+            val itemId = backNavigation.arguments?.getString("id")
+            FeedDetailsScreen(navController, itemId)
         }
-
-        /*composable(FeedScreenNavigationEnum.FEED_DETAILS.value + "/id", arguments = listOf(navArgument("id") {
-            type = NavType.IntType
-        })) { backNavigation ->
-
-            FeedDetailsScreen(id = backNavigation.arguments?.getInt("id") ?: 0, navController = navController)
-        }*/
     }
 }
